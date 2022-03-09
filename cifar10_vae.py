@@ -247,9 +247,9 @@ for batch_idx, (inputs, targets) in enumerate(trainloader):
       print(kld_loss)
     for i in range(10):
       fig, axs = plt.subplots(1,2)
-      axs[0].imshow(inputs[i].permute(1, 2, 0))
+      axs[0].imshow(inputs[i].permute(1, 2, 0).cpu())
       axs[0].axis('off')
-      axs[1].imshow(recon[i].permute(1, 2, 0))
+      axs[1].imshow(recon[i].permute(1, 2, 0).cpu())
       axs[1].axis('off')
       plt.savefig('cifar_vae_'+str(i))
     break
