@@ -42,6 +42,8 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False)
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 class VanillaVAE(nn.Module):
     def __init__(self,
                  in_channels,
@@ -203,9 +205,8 @@ class VanillaVAE(nn.Module):
 
         return self.forward(x)[0]
 
-vae = VanillaVAE(3, 128)
-if torch.cuda.is_available():
-    vae.cuda()
+vae = VanillaVAE(3, 128).to(device)
+
 optimizer = optim.Adam(vae.parameters(),weight_decay=5e-4)
 lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer,0.003,epochs=10,steps_per_epoch=len(trainloader))
 
@@ -214,8 +215,7 @@ def test():
     test_loss= 0
     with torch.no_grad():
         for data, _ in testloader:
-            if torch.cuda.is_available():
-                data = data.cuda()
+            data = data.to(device)
             recon, input, mu, log_var  = vae(data)
             
             # sum up batch loss
@@ -226,8 +226,7 @@ def test():
 
 for epoch in range(10):
   for batch_idx, (inputs, targets) in enumerate(trainloader):
-    if torch.cuda.is_available():
-      inputs.cuda()
+    inputs = inputs.to(device)
     optimizer.zero_grad()
     recon, input, mu, log_var = vae(inputs)
     loss_dict = vae.loss_function(recon, input, mu, log_var)
@@ -240,8 +239,7 @@ for epoch in range(10):
 
 from matplotlib import pyplot as plt
 for batch_idx, (inputs, targets) in enumerate(trainloader):
-    # plt.imshow(inputs[0].permute(1, 2, 0))
-    # plt.show()
+    inputs = inputs.to(device)
     with torch.no_grad():
       recon, input, mu, log_var = vae(inputs)
       kld_loss = -0.5 * torch.sum(1 + log_var - mu ** 2 - log_var.exp())
