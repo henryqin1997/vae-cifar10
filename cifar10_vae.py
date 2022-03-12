@@ -205,10 +205,10 @@ class VanillaVAE(nn.Module):
 
         return self.forward(x)[0]
 
-vae = VanillaVAE(3, 128).to(device)
+vae = VanillaVAE(3, 256).to(device)
 
-optimizer = optim.Adam(vae.parameters(),weight_decay=5e-4)
-lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer,0.003,epochs=10,steps_per_epoch=len(trainloader))
+optimizer = optim.Adam(vae.parameters())
+lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer,0.002,epochs=10,steps_per_epoch=len(trainloader))
 
 def test():
     vae.eval()
@@ -251,5 +251,5 @@ for batch_idx, (inputs, targets) in enumerate(trainloader):
       axs[0].axis('off')
       axs[1].imshow(recon[i].permute(1, 2, 0).cpu())
       axs[1].axis('off')
-      plt.savefig('cifar_vae_'+str(i))
+      plt.savefig('cifar_vae_z256_'+str(i))
     break
