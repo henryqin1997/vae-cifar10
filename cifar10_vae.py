@@ -258,5 +258,5 @@ samples = vae.sample(10)
 for i in range(10):
       plt.figure()
       plt.imshow(samples[i].permute(1, 2, 0).cpu())
-      plt.axis('off)
+      plt.axis('off')
       plt.savefig('cifar_vae_z256_random_sample'+str(i))
