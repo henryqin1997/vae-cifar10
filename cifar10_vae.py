@@ -238,7 +238,8 @@ for epoch in range(10):
   test()
 
 from matplotlib import pyplot as plt
-for batch_idx, (inputs, targets) in enumerate(trainloader):
+for i in range(10):
+    inputs,label = trainset[i]
     inputs = inputs.to(device)
     with torch.no_grad():
       recon, input, mu, log_var = vae(inputs)
@@ -251,12 +252,11 @@ for batch_idx, (inputs, targets) in enumerate(trainloader):
       axs[0].axis('off')
       axs[1].imshow(recon[i].permute(1, 2, 0).cpu())
       axs[1].axis('off')
-      plt.savefig('cifar_vae_z256_'+str(i))
-    break
+      plt.savefig('cifar_vae_normal_z256_'+str(i))
 
 samples = vae.sample(10)
 for i in range(10):
       plt.figure()
       plt.imshow(samples[i].permute(1, 2, 0).cpu())
       plt.axis('off')
-      plt.savefig('cifar_vae_z256_random_sample'+str(i))
+      plt.savefig('cifar_vae_z256_random_normal_sample'+str(i))
