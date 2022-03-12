@@ -191,7 +191,7 @@ class VanillaVAE(nn.Module):
         :return: (Tensor)
         """
         z = torch.randn(num_samples,
-                        self.latent_dim)
+                        self.latent_dim).to(device)
 
         samples = self.decode(z)
         return samples
