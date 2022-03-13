@@ -192,8 +192,8 @@ class VanillaVAE(nn.Module):
         """
         z = torch.randn(num_samples,
                         self.latent_dim).to(device)
-
-        samples = self.decode(z)
+        with torch.no_grad():
+            samples = self.decode(z)
         return samples
 
     def generate(self, x, **kwargs):
