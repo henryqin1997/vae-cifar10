@@ -241,7 +241,7 @@ from matplotlib import pyplot as plt
 trainloader = torch.utils.data.DataLoader(
     trainset, batch_size=10, shuffle=False)
 
-for batch_idx, (inputs, targets) in enumerate(trainloader)::
+for batch_idx, (inputs, targets) in enumerate(trainloader):
     inputs = inputs.to(device)
     with torch.no_grad():
       recon, input, mu, log_var = vae(inputs)
