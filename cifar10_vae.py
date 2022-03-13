@@ -173,7 +173,7 @@ class VanillaVAE(nn.Module):
         log_var = args[3]
 
         # kld_weight = kwargs['M_N'] # Account for the minibatch samples from the dataset
-        recons_loss =F.mse_loss(recons, input)
+        recons_loss =F.l1_loss(recons, input)
 
         kld_loss = 0.00025*torch.mean(-0.5 * torch.sum(1 + log_var - mu ** 2 - log_var.exp(), dim = 1), dim = 0)
 
@@ -246,7 +246,7 @@ for batch_idx, (inputs, targets) in enumerate(trainloader):
     with torch.no_grad():
       recon, input, mu, log_var = vae(inputs)
       kld_loss = -0.5 * torch.sum(1 + log_var - mu ** 2 - log_var.exp())
-      print(F.mse_loss(recon, input))
+      print(F.l1_loss(recon, input))
       print(kld_loss)
     for i in range(10):
       fig, axs = plt.subplots(1,2)
@@ -254,7 +254,7 @@ for batch_idx, (inputs, targets) in enumerate(trainloader):
       axs[0].axis('off')
       axs[1].imshow(recon[i].permute(1, 2, 0).cpu())
       axs[1].axis('off')
-      plt.savefig('cifar_vae_normal_z256_'+str(i))
+      plt.savefig('cifar_vae_laplace_z256_'+str(i))
     break
 
 samples = vae.sample(10)
@@ -262,4 +262,4 @@ for i in range(10):
       plt.figure()
       plt.imshow(samples[i].permute(1, 2, 0).cpu())
       plt.axis('off')
-      plt.savefig('cifar_vae_z256_random_normal_sample'+str(i))
+      plt.savefig('cifar_vae_z256_laplace_normal_sample'+str(i))
