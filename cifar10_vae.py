@@ -166,6 +166,7 @@ class VanillaVAE(nn.Module):
         :param args:
         :param kwargs:
         :return:
+        note: this version is modified to l1 loss to see the difference. use official implementation for original VAE.
         """
         recons = args[0]
         input = args[1]
